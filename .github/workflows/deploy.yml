@@ -1,0 +1,14 @@
+name: Deploy DAGs to Proxmox
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Aquí es donde ocurre la magia
+    steps:
+      - uses: actions/checkout@v3
+      - name: Sync DAGs
+        run: |
+          # Esto se ejecuta localmente en tu LXC
+          rsync -avz --delete ./ /root/dags/
