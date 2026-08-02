@@ -6,7 +6,7 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 
 def helloWorld():
-        logging.info("Deploy test")
+        logging.info("Deploy test 2")
 
 with DAG(
         dag_id = "hello_word_dag",
