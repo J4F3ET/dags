@@ -11,4 +11,4 @@ jobs:
       - name: Sync DAGs
         run: |
           # Esto se ejecuta localmente en tu LXC
-          rsync -avz --delete ./ /root/dags/
+          rsync -avz --delete ./ /home/github_runner/airflow/
