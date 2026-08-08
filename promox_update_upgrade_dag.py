@@ -1,15 +1,11 @@
 import logging
 import concurrent.futures
 
-
-from airflow import DAG
 from datetime import datetime,timedelta
 
-from airflow.providers.standard.operators.python import PythonOperator
-from airflow.providers.standard.operators.bash import BashOperator
-from airflow.providers.ssh.hooks.ssh import SSHHook
-
+from airflow import DAG
 from airflow.sdk import task
+from airflow.providers.ssh.hooks.ssh import SSHHook
 # Python
 
 def update_pct(pct_id:str):
