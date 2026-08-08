@@ -14,4 +14,5 @@ jobs:
             --exclude='.git/' \
             --exclude='.github/' \
             --exclude='__pycache__/' \
+            --exclude='README.md' \
             ./ /home/github_runner/airflow/dags/
