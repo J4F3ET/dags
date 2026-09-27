@@ -94,10 +94,10 @@ def update_pcts(pct_ids):
 @task
 def update_host():
     logger = logging.getLogger("airflow.task")
-    logger.info(f'🕐 Actualizando host...')
+    logger.info('🕐 Actualizando host...')
     ssh_hook = SSHHook(ssh_conn_id='proxmox_ssh')
 
-    command = f"apt-get update && apt-get upgrade -y && apt-get autoremove -y && apt-get clean"
+    command = "apt-get update && apt-get upgrade -y && apt-get autoremove -y && apt-get clean"
 
     try:
         with ssh_hook.get_conn() as ssh_client: 

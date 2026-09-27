@@ -1,0 +1,54 @@
+name: CI/CD
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    # Siempre en runners de GitHub: la validación no gasta recursos del homelab y los PRs nunca lo tocan.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint (ruff)
+        run: pipx run ruff check .
+
+      - name: Validar docker-compose.yaml
+        run: |
+          cp .env.example .env
+          # Valores de relleno: solo se valida la sintaxis y la interpolación, no se arranca nada.
+          sed -i 's/^FERNET_KEY=.*/FERNET_KEY=ci/; s/^JWT_SECRET=.*/JWT_SECRET=ci/' .env
+          docker compose config --quiet
+
+      - name: Construir imagen
+        run: docker build -t airflow-homelab:ci .
+
+      - name: Verificar que los DAGs importan dentro de la imagen
+        run: >
+          docker run --rm
+          -e CONNECTION_CHECK_MAX_COUNT=0
+          -v "$PWD:/repo:ro" -w /repo
+          airflow-homelab:ci
+          python tests/check_dags.py dags
+
+  deploy:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: self-hosted
+    concurrency:
+      group: deploy-homelab
+      cancel-in-progress: false
+    env:
+      AIRFLOW_DIR: /home/github_runner/airflow
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Desplegar
+        run: bash scripts/deploy.sh "${{ github.event.before }}" "${{ github.sha }}"

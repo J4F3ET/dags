@@ -1,0 +1,2 @@
+# Dependencias de los DAGs. Se instalan al construir la imagen (Dockerfile), nunca al arrancar un contenedor.
+apache-airflow-providers-ssh
