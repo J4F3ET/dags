@@ -1,0 +1,4 @@
+# Config del repo: tiene prioridad sobre cualquier ruff.toml global, así el lint es igual en local y en CI.
+# Reglas por defecto de ruff: errores reales (imports sin usar, nombres indefinidos, sintaxis), no estilo.
+[lint]
+select = ["E4", "E7", "E9", "F"]
