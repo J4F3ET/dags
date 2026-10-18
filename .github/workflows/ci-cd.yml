@@ -38,7 +38,9 @@ jobs:
 
   deploy:
     needs: validate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Desactivado mientras no haya un host con RAM suficiente. Para reactivarlo, crear la variable de
+    # repositorio DEPLOY_ENABLED=true (Settings → Secrets and variables → Actions → Variables).
+    if: vars.DEPLOY_ENABLED == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: self-hosted
     concurrency:
       group: deploy-homelab
